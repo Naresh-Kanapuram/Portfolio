@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ZestBite — Food Ordering</title>
+  <link rel="preload" href="assets/fonts/Montserrat-Variable.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="preload" href="assets/fonts/Poppins-Variable.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+  <div class="bg-orbs"></div>
+  <header class="site-header glass">
+    <div class="brand">
+      <div class="brand-mark">🍽️</div>
+      <h1 class="brand-name">ZestBite</h1>
+    </div>
+    <div class="search-sort">
+      <input id="searchInput" type="text" placeholder="Search dishes, tags, cuisines..." aria-label="Search menu"/>
+      <select id="sortSelect" aria-label="Sort by">
+        <option value="default">Sort: Featured</option>
+        <option value="price-asc">Price: Low → High</option>
+        <option value="price-desc">Price: High → Low</option>
+        <option value="discount-desc">Discount: High → Low</option>
+        <option value="rating-desc">Rating: High → Low</option>
+      </select>
+    </div>
+    <nav class="nav-cats" aria-label="Categories">
+      <button class="cat-btn active" data-cat="All">All</button>
+      <button class="cat-btn" data-cat="Veg">Veg</button>
+      <button class="cat-btn" data-cat="Non-Veg">Non-Veg</button>
+      <button class="cat-btn" data-cat="Tiffins">Tiffins</button>
+      <button class="cat-btn" data-cat="Meals">Meals</button>
+      <button class="cat-btn" data-cat="Snacks">Snacks</button>
+      <button class="cat-btn" data-cat="Ice Creams">Ice Creams</button>
+      <button class="cat-btn" data-cat="Beverages">Beverages</button>
+    </nav>
+    <button class="cart-button" id="openCartBtn" aria-label="Open cart">
+      <span class="cart-icon" aria-hidden="true"></span>
+      <span id="cartCount" class="cart-count">0</span>
+    </button>
+  </header>
+
+  <main>
+    <section class="hero glass">
+      <div class="hero-text">
+        <h2>Flavour meets Speed</h2>
+        <p>Handpicked recommendations, sizzling discounts, and lightning‑fast delivery for every craving.</p>
+      </div>
+      <div class="hero-badges">
+        <div class="badge">Free delivery above ₹499</div>
+        <div class="badge">Exclusive combos</div>
+        <div class="badge">Live order tracking</div>
+      </div>
+    </section>
+
+    <section class="section glass">
+      <div class="section-head">
+        <h3>Recommended</h3>
+        <div class="scroll-actions">
+          <button class="scroll-btn" id="recLeft" aria-label="Scroll left">◀</button>
+          <button class="scroll-btn" id="recRight" aria-label="Scroll right">▶</button>
+        </div>
+      </div>
+      <div class="recommend-strip" id="recommendStrip" role="list"></div>
+    </section>
+
+    <section class="section glass">
+      <div class="section-head">
+        <h3>All Dishes</h3>
+        <div class="filters">
+          <label class="checkbox">
+            <input type="checkbox" id="filterFreeDelivery"/> Free Delivery
+          </label>
+          <label class="checkbox">
+            <input type="checkbox" id="filterDiscounted"/> Discounted
+          </label>
+          <label class="checkbox">
+            <input type="checkbox" id="filterVegOnly"/> Veg Only
+          </label>
+        </div>
+      </div>
+      <div id="productGrid" class="grid" role="list"></div>
+      <div id="emptyState" class="empty hidden">No items match the filters.</div>
+    </section>
+  </main>
+
+  <aside class="cart-drawer" id="cartDrawer" aria-hidden="true" aria-label="Shopping cart">
+    <div class="cart-head">
+      <h3>Your Cart</h3>
+      <button id="closeCartBtn" class="icon-btn" aria-label="Close cart">✕</button>
+    </div>
+    <div id="cartItems" class="cart-items"></div>
+    <div class="cart-summary">
+      <div class="row">
+        <span>Subtotal</span><span id="subtotalVal">₹0</span>
+      </div>
+      <div class="row">
+        <span>Discount</span><span id="discountVal">-₹0</span>
+      </div>
+      <div class="row">
+        <span>Delivery</span><span id="deliveryVal">₹0</span>
+      </div>
+      <div class="row total">
+        <span>Total</span><span id="totalVal">₹0</span>
+      </div>
+
+      <div class="coupon">
+        <input id="couponInput" placeholder="Have a coupon (e.g., WELCOME50)"/>
+        <button id="applyCouponBtn">Apply</button>
+      </div>
+
+      <button id="checkoutBtn" class="primary-btn">Proceed to Checkout</button>
+    </div>
+  </aside>
+
+  <div id="overlay" class="overlay hidden" tabindex="-1" aria-hidden="true"></div>
+
+  <dialog id="checkoutModal" class="modal">
+    <form id="checkoutForm" method="dialog">
+      <div class="modal-head">
+        <h3>Checkout</h3>
+        <button class="icon-btn" type="button" id="closeCheckout">✕</button>
+      </div>
+      <div class="modal-body two-col">
+        <div class="delivery-pane">
+          <h4>Delivery Details</h4>
+          <label>Full Name<input required id="nameInput" /></label>
+          <label>Mobile<input required id="phoneInput" pattern="[0-9]{10}" /></label>
+          <label>Address<textarea required id="addrInput" rows="3"></textarea></label>
+          <label>Pincode<input required id="pinInput" pattern="[0-9]{6}" /></label>
+        </div>
+        <div class="payment-pane">
+          <h4>Payment</h4>
+          <div class="pay-options">
+            <label><input type="radio" name="pay" value="CARD" checked/> Card</label>
+            <label><input type="radio" name="pay" value="UPI"/> UPI</label>
+            <label><input type="radio" name="pay" value="COD"/> Cash on Delivery</label>
+          </div>
+
+          <div id="cardFields">
+            <label>Card Number<input id="cardNumber" inputmode="numeric" autocomplete="cc-number" placeholder="XXXX XXXX XXXX XXXX"/></label>
+            <label>Expiry (MM/YY)<input id="cardExpiry" placeholder="MM/YY"/></label>
+            <label>CVV<input id="cardCVV" inputmode="numeric" placeholder="XXX"/></label>
+          </div>
+
+          <div id="upiFields" class="hidden">
+            <label>UPI ID<input id="upiId" placeholder="name@bank"/></label>
+          </div>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button class="secondary-btn" type="button" id="backToCart">Back</button>
+        <button class="primary-btn" type="submit" id="placeOrderBtn">Place Order</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="orderConfirmModal" class="modal">
+    <div class="modal-head">
+      <h3>Order Confirmed</h3>
+      <button class="icon-btn" id="closeConfirm">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="confirm-box">
+        <div class="order-id">Order ID: <span id="orderIdText"></span></div>
+        <p>Estimated Delivery: <strong id="etaText"></strong></p>
+      </div>
+      <div class="timeline" id="trackingTimeline">
+        <!-- Steps dynamically injected -->
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="primary-btn" id="trackLiveBtn">Track Live</button>
+      <button class="secondary-btn" id="newOrderBtn">New Order</button>
+    </div>
+  </dialog>
+
+  <div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
+
+  <footer class="site-footer glass">
+    <div class="cols">
+      <div>
+        <h4>About</h4>
+        <p>Crafted for stunning looks and smooth ordering, with local assets and open fonts.</p>
+      </div>
+      <div>
+        <h4>Policies</h4>
+        <p>Veg/Non‑Veg marking per Indian labelling standards where applicable.</p>
+      </div>
+      <div>
+        <h4>Credits</h4>
+        <p>Images from a free-to-use stock library and self-hosted open fonts.</p>
+      </div>
+    </div>
+    <p class="copy">© 2025 ZestBite</p>
+  </footer>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

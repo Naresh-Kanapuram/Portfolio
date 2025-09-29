@@ -1,0 +1,455 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NovaMart — Extraordinary Online Shopping</title>
+
+  <!-- Extraordinary Fonts (Google Fonts) -->
+  <!-- Reference: Google Fonts API usage -->
+  <!-- See docs: fonts.google.com / Getting started -->
+  <!-- Using multiple display and sans fonts for a dramatic, premium look -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"> 
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Carefully curated stack for headers, accents, and body -->
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:wght@600;800&family=Space+Grotesk:wght@400;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome Icons -->
+  <!-- Reference: Font Awesome quick start / CDN/kits -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="./styles.css"/>
+</head>
+<body>
+  <!-- Animated gradient background and particles canvas -->
+  <canvas id="bg-particles" aria-hidden="true"></canvas>
+  <div class="global-gradient"></div>
+
+  <!-- Top utility bar -->
+  <div class="topbar">
+    <div class="container flex">
+      <div class="topbar-left">
+        <span class="badge-pill">Free Shipping on orders over ₹999</span>
+        <span class="divider"></span>
+        <span class="badge-pill alt">Festival Sale Live — Up to 70% Off</span>
+      </div>
+      <div class="topbar-right">
+        <a href="#" class="top-link"><i class="fa-solid fa-headset"></i> Support</a>
+        <a href="#" class="top-link"><i class="fa-solid fa-circle-question"></i> Help</a>
+        <a href="#" class="top-link"><i class="fa-solid fa-gift"></i> Offers</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="container header-inner">
+      <a href="#" class="brand">
+        <span class="brand-logo">N</span>
+        <span class="brand-name">NovaMart</span>
+      </a>
+
+      <form class="search" id="searchForm">
+        <input id="searchInput" type="text" placeholder="Search for mobiles, laptops, fashion, appliances..." aria-label="Search"/>
+        <button class="btn btn-neon" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+      </form>
+
+      <nav class="nav-actions">
+        <button class="icon-btn" id="wishlistBtn" aria-label="Open wishlist">
+          <i class="fa-regular fa-heart"></i><span class="count-badge" id="wishlistCount">0</span>
+        </button>
+        <button class="icon-btn" id="cartBtn" aria-label="Open cart">
+          <i class="fa-solid fa-cart-shopping"></i><span class="count-badge" id="cartCount">0</span>
+        </button>
+        <button class="icon-btn" id="accountBtn" aria-label="Account">
+          <i class="fa-regular fa-user"></i>
+        </button>
+        <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+          <span></span><span></span><span></span>
+        </button>
+      </nav>
+    </div>
+
+    <div class="category-nav" id="categoryNav">
+      <div class="container categories">
+        <button class="cat-chip" data-cat="all"><i class="fa-solid fa-rocket"></i> All</button>
+        <button class="cat-chip" data-cat="fashion"><i class="fa-solid fa-shirt"></i> Fashion</button>
+        <button class="cat-chip" data-cat="shoes"><i class="fa-solid fa-shoe-prints"></i> Shoes</button>
+        <button class="cat-chip" data-cat="electronics"><i class="fa-solid fa-plug"></i> Electronics</button>
+        <button class="cat-chip" data-cat="mobiles"><i class="fa-solid fa-mobile-screen"></i> Mobiles</button>
+        <button class="cat-chip" data-cat="tvs"><i class="fa-solid fa-tv"></i> TVs</button>
+        <button class="cat-chip" data-cat="laptops"><i class="fa-solid fa-laptop"></i> Laptops</button>
+        <button class="cat-chip" data-cat="home-appliances"><i class="fa-solid fa-blender"></i> Home Appliances</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container hero-inner">
+      <div class="hero-copy">
+        <h1 class="display">Unleash Extraordinary</h1>
+        <p class="lead">
+          Hand‑picked tech and fashion drops with neon‑glow aesthetics, cinematic product cards, and buttery‑smooth interactions.
+        </p>
+        <div class="hero-cta">
+          <a href="#featured" class="btn btn-neon btn-lg"><i class="fa-solid fa-bolt"></i> Shop Trending</a>
+          <a href="#categories" class="btn btn-ghost btn-lg"><i class="fa-solid fa-layer-group"></i> Browse Categories</a>
+        </div>
+      </div>
+      <div class="hero-carousel">
+        <div class="carousel" id="heroCarousel" aria-label="Featured carousel">
+          <!-- Slides injected by JS -->
+        </div>
+        <div class="carousel-controls">
+          <button id="heroPrev" class="carousel-btn" aria-label="Previous"><i class="fa-solid fa-chevron-left"></i></button>
+          <button id="heroNext" class="carousel-btn" aria-label="Next"><i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+        <div class="carousel-dots" id="heroDots" role="tablist" aria-label="Carousel dots"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Category Tiles -->
+  <section id="categories" class="category-tiles section-pad">
+    <div class="container">
+      <h2 class="h-section">Shop by Category</h2>
+      <div class="tiles-grid">
+        <a class="tile" data-cat="fashion">
+          <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=1400&auto=format&fit=crop" alt="Fashion"/>
+          <div class="tile-info"><span>Fashion</span></div>
+        </a>
+        <a class="tile" data-cat="shoes">
+          <img src="https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?q=80&w=1400&auto=format&fit=crop" alt="Shoes"/>
+          <div class="tile-info"><span>Shoes</span></div>
+        </a>
+        <a class="tile" data-cat="electronics">
+          <img src="https://images.unsplash.com/photo-1518779578993-ec3579fee39f?q=80&w=1400&auto=format&fit=crop" alt="Electronics"/>
+          <div class="tile-info"><span>Electronics</span></div>
+        </a>
+        <a class="tile" data-cat="mobiles">
+          <img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?q=80&w=1400&auto=format&fit=crop" alt="Mobiles"/>
+          <div class="tile-info"><span>Mobiles</span></div>
+        </a>
+        <a class="tile" data-cat="tvs">
+          <img src="https://images.unsplash.com/photo-1582281298056-2efc39b62b60?q=80&w=1400&auto=format&fit=crop" alt="TVs"/>
+          <div class="tile-info"><span>TVs</span></div>
+        </a>
+        <a class="tile" data-cat="laptops">
+          <img src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?q=80&w=1400&auto=format&fit=crop" alt="Laptops"/>
+          <div class="tile-info"><span>Laptops</span></div>
+        </a>
+        <a class="tile" data-cat="home-appliances">
+          <img src="https://images.unsplash.com/photo-1585518410931-c28b5b3baddc?q=80&w=1400&auto=format&fit=crop" alt="Appliances"/>
+          <div class="tile-info"><span>Home Appliances</span></div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Filters + Sort -->
+  <section id="featured" class="section-pad">
+    <div class="container">
+      <div class="toolbar">
+        <div class="filters">
+          <select id="filterCategory" aria-label="Filter by category">
+            <option value="all">All Categories</option>
+            <option value="fashion">Fashion</option>
+            <option value="shoes">Shoes</option>
+            <option value="electronics">Electronics</option>
+            <option value="mobiles">Mobiles</option>
+            <option value="tvs">TVs</option>
+            <option value="laptops">Laptops</option>
+            <option value="home-appliances">Home Appliances</option>
+          </select>
+          <select id="filterBrand" aria-label="Filter by brand">
+            <option value="all">All Brands</option>
+          </select>
+          <select id="sortBy" aria-label="Sort products">
+            <option value="featured">Featured</option>
+            <option value="price-asc">Price: Low to High</option>
+            <option value="price-desc">Price: High to Low</option>
+            <option value="rating-desc">Rating</option>
+            <option value="newest">Newest</option>
+          </select>
+        </div>
+        <div class="view-toggle">
+          <button id="gridView" class="is-active" aria-label="Grid view"><i class="fa-solid fa-grip"></i></button>
+          <button id="listView" aria-label="List view"><i class="fa-solid fa-list"></i></button>
+        </div>
+      </div>
+
+      <!-- Skeleton loader -->
+      <div id="skeletonGrid" class="products-grid skeleton">
+        <!-- many skeleton cards -->
+      </div>
+
+      <div id="productsGrid" class="products-grid">
+        <!-- Cards injected by JS -->
+      </div>
+
+      <div class="load-more-wrap">
+        <button class="btn btn-ghost" id="loadMore"><i class="fa-solid fa-infinity"></i> Load More</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="features section-pad">
+    <div class="container features-grid">
+      <div class="feature">
+        <i class="fa-solid fa-truck-fast"></i>
+        <h3>Express Delivery</h3>
+        <p>Lightning‑fast shipping with live tracking and proactive updates for every order.</p>
+      </div>
+      <div class="feature">
+        <i class="fa-solid fa-shield-heart"></i>
+        <h3>Secure Checkout</h3>
+        <p>Industry‑standard form validation and no real payments processed in demo mode.</p>
+      </div>
+      <div class="feature">
+        <i class="fa-solid fa-rotate"></i>
+        <h3>Easy Returns</h3>
+        <p>Hassle‑free returns window with instant confirmations and email receipts.</p>
+      </div>
+      <div class="feature">
+        <i class="fa-solid fa-badge-check"></i>
+        <h3>Top Brands</h3>
+        <p>Curated catalog spanning fashion, shoes, electronics, and home essentials.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Newsletter -->
+  <section class="newsletter section-pad">
+    <div class="container newsletter-inner">
+      <h2 class="h-section">Get Exclusive Drops</h2>
+      <form id="newsletterForm" class="newsletter-form">
+        <input type="email" placeholder="Enter email for secret deals" required/>
+        <button class="btn btn-neon" type="submit"><i class="fa-solid fa-envelope-open-text"></i> Subscribe</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-grid">
+      <div class="footer-brand">
+        <a href="#" class="brand">
+          <span class="brand-logo">N</span>
+          <span class="brand-name">NovaMart</span>
+        </a>
+        <p>Extraordinary styles and cutting‑edge tech, beautifully crafted for performance and delight.</p>
+        <div class="socials">
+          <a><i class="fa-brands fa-instagram"></i></a>
+          <a><i class="fa-brands fa-youtube"></i></a>
+          <a><i class="fa-brands fa-x-twitter"></i></a>
+        </div>
+      </div>
+      <div>
+        <h4>Shop</h4>
+        <ul>
+          <li><a data-cat="fashion" class="ft-cat">Fashion</a></li>
+          <li><a data-cat="shoes" class="ft-cat">Shoes</a></li>
+          <li><a data-cat="electronics" class="ft-cat">Electronics</a></li>
+          <li><a data-cat="mobiles" class="ft-cat">Mobiles</a></li>
+          <li><a data-cat="tvs" class="ft-cat">TVs</a></li>
+          <li><a data-cat="laptops" class="ft-cat">Laptops</a></li>
+          <li><a data-cat="home-appliances" class="ft-cat">Home Appliances</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Support</h4>
+        <ul>
+          <li><a>Contact</a></li>
+          <li><a>Returns</a></li>
+          <li><a>Warranty</a></li>
+          <li><a>Shipping</a></li>
+          <li><a>FAQs</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Legal</h4>
+        <ul>
+          <li><a>Privacy</a></li>
+          <li><a>Terms</a></li>
+          <li><a>Licenses</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-note">
+      <div class="container flex between">
+        <span>© <span id="year"></span> NovaMart. Demo site for learning.</span>
+        <span>Typography via Google Fonts, Icons via Font Awesome, Sample images via Unsplash/Pexels.</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Drawers and Modals -->
+  <aside class="drawer" id="cartDrawer" aria-hidden="true">
+    <div class="drawer-header">
+      <h3><i class="fa-solid fa-cart-shopping"></i> Cart</h3>
+      <button class="icon-btn" data-close="#cartDrawer"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="drawer-body" id="cartItems"></div>
+    <div class="drawer-footer">
+      <div class="cart-summary">
+        <div><span>Subtotal</span><strong id="cartSubtotal">₹0</strong></div>
+        <div><span>Shipping</span><strong id="cartShipping">₹0</strong></div>
+        <div><span>Discount</span><strong id="cartDiscount">-₹0</strong></div>
+        <div class="total"><span>Total</span><strong id="cartTotal">₹0</strong></div>
+      </div>
+      <button id="checkoutBtn" class="btn btn-neon w-100"><i class="fa-solid fa-lock"></i> Checkout</button>
+    </div>
+  </aside>
+
+  <aside class="drawer" id="wishlistDrawer" aria-hidden="true">
+    <div class="drawer-header">
+      <h3><i class="fa-regular fa-heart"></i> Wishlist</h3>
+      <button class="icon-btn" data-close="#wishlistDrawer"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="drawer-body" id="wishlistItems"></div>
+  </aside>
+
+  <!-- Quick View Modal -->
+  <div class="modal" id="quickView" aria-hidden="true" role="dialog" aria-label="Quick view product">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <button class="icon-btn modal-close" data-close="#quickView"><i class="fa-solid fa-xmark"></i></button>
+        <div class="qv-wrap">
+          <div class="qv-media">
+            <div class="qv-main-img">
+              <img id="qvImg" alt="Product image"/>
+            </div>
+            <div class="qv-thumbs" id="qvThumbs"></div>
+          </div>
+          <div class="qv-info">
+            <h3 id="qvTitle"></h3>
+            <div class="rating" id="qvRating"></div>
+            <div class="price">
+              <span class="curr" id="qvPrice"></span>
+              <span class="mrp" id="qvMRP"></span>
+              <span class="off" id="qvOff"></span>
+            </div>
+            <p id="qvDesc"></p>
+            <div class="meta" id="qvMeta"></div>
+            <div class="qv-actions">
+              <button id="qvAddToCart" class="btn btn-neon"><i class="fa-solid fa-cart-plus"></i> Add to Cart</button>
+              <button id="qvWishlist" class="btn btn-ghost"><i class="fa-regular fa-heart"></i> Wishlist</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Checkout Modal -->
+  <div class="modal" id="checkoutModal" aria-hidden="true" role="dialog" aria-label="Checkout">
+    <div class="modal-dialog wide">
+      <div class="modal-content">
+        <button class="icon-btn modal-close" data-close="#checkoutModal"><i class="fa-solid fa-xmark"></i></button>
+        <div class="checkout-grid">
+          <div class="co-left">
+            <h3>Shipping Details</h3>
+            <form id="shippingForm" class="form-grid">
+              <input required name="name" placeholder="Full Name"/>
+              <input required name="phone" placeholder="Phone"/>
+              <input required name="email" type="email" placeholder="Email"/>
+              <input required name="address" placeholder="Address Line 1"/>
+              <input name="address2" placeholder="Address Line 2"/>
+              <div class="two-col">
+                <input required name="city" placeholder="City"/>
+                <input required name="pincode" placeholder="Pincode"/>
+              </div>
+              <div class="two-col">
+                <input required name="state" placeholder="State"/>
+                <input required name="country" placeholder="Country" value="India"/>
+              </div>
+            </form>
+
+            <h3>Payment Details (Demo)</h3>
+            <form id="paymentForm" class="form-grid">
+              <input required name="cardName" placeholder="Name on Card"/>
+              <input required name="cardNumber" placeholder="Card Number (demo)"/>
+              <div class="three-col">
+                <input required name="expMonth" placeholder="MM"/>
+                <input required name="expYear" placeholder="YY"/>
+                <input required name="cvc" placeholder="CVC"/>
+              </div>
+              <div class="note">
+                Use typical test patterns like 4242 4242 4242 4242 for demo success in development contexts only.
+              </div>
+            </form>
+
+            <button id="placeOrder" class="btn btn-neon w-100"><i class="fa-solid fa-circle-check"></i> Place Order</button>
+          </div>
+
+          <div class="co-right">
+            <h3>Order Summary</h3>
+            <div id="coItems"></div>
+            <div class="cart-summary">
+              <div><span>Subtotal</span><strong id="coSubtotal">₹0</strong></div>
+              <div><span>Shipping</span><strong id="coShipping">₹0</strong></div>
+              <div><span>Discount</span><strong id="coDiscount">-₹0</strong></div>
+              <div class="total"><span>Total</span><strong id="coTotal">₹0</strong></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Order Confirmation -->
+  <div class="modal" id="orderConfirm" aria-hidden="true" role="dialog" aria-label="Order confirmation">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <button class="icon-btn modal-close" data-close="#orderConfirm"><i class="fa-solid fa-xmark"></i></button>
+        <div class="confirm-wrap">
+          <i class="fa-solid fa-circle-check big"></i>
+          <h3>Order Confirmed</h3>
+          <p>Order ID: <strong id="ocOrderId"></strong></p>
+          <p>Estimated Delivery: <strong id="ocEta"></strong></p>
+          <button id="goTrack" class="btn btn-ghost"><i class="fa-solid fa-truck"></i> Track Order</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Order Tracking -->
+  <div class="modal" id="orderTracking" aria-hidden="true" role="dialog" aria-label="Order tracking">
+    <div class="modal-dialog wide">
+      <div class="modal-content">
+        <button class="icon-btn modal-close" data-close="#orderTracking"><i class="fa-solid fa-xmark"></i></button>
+        <div class="track-wrap">
+          <div class="track-head">
+            <h3>Order Tracking</h3>
+            <div class="track-meta">
+              <div>Order ID: <strong id="trkOrderId"></strong></div>
+              <div>Status: <strong id="trkStatus"></strong></div>
+              <div>ETA: <strong id="trkEta"></strong></div>
+            </div>
+          </div>
+          <div class="timeline">
+            <div class="step"><span class="dot"></span><div class="label">Order Placed</div></div>
+            <div class="step"><span class="dot"></span><div class="label">Packed</div></div>
+            <div class="step"><span class="dot"></span><div class="label">Shipped</div></div>
+            <div class="step"><span class="dot"></span><div class="label">Out for Delivery</div></div>
+            <div class="step"><span class="dot"></span><div class="label">Delivered</div></div>
+          </div>
+          <div class="track-log" id="trkLog"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toasts -->
+  <div class="toasts" id="toasts"></div>
+
+  <!-- Scripts -->
+  <script src="./data.js"></script>
+  <script src="./script.js"></script>
+</body>
+</html>

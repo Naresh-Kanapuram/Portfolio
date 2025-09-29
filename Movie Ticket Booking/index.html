@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>CineX — Movie Ticket Booking</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#11111a" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="backdrop" aria-hidden="true"></div>
+
+  <header>
+    <div class="nav" role="navigation" aria-label="Primary">
+      <a href="#" class="brand" aria-label="CineX Home">
+        <div class="logo">CX</div><span>CineX</span>
+      </a>
+      <div class="nav-fill">
+        <div class="search" role="search">
+          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" aria-hidden="true"><path stroke="#b8c2d0" stroke-width="2" d="m21 21-3.5-3.5M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15Z"/></svg>
+          <input id="searchInput" type="text" placeholder="Search movies, genres, languages..." />
+        </div>
+        <button class="btn" id="offersBtn" type="button">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path stroke="#b8c2d0" stroke-width="2" d="M12 3v18M3 12h18"/></svg>
+          Offers
+        </button>
+        <button class="btn primary glow" id="resumeBtn" type="button" title="Load last booking">Resume</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" aria-label="Highlights">
+      <div class="hero-grid">
+        <div>
+          <h1>Book Movies in Neon Style</h1>
+          <p>Pick a film, choose seats, apply offers, finish payment, and get a beautiful ticket with a unique booking ID and QR‑style code instantly.</p>
+          <div class="highlight-row">
+            <span class="chip">U • U/A • A</span>
+            <span class="chip">2D • 3D • IMAX</span>
+            <span class="chip">VIP • Prime • Regular</span>
+            <span class="chip">UPI • Card • Wallet</span>
+          </div>
+        </div>
+        <div class="card">
+          <h3>Quick Start</h3>
+          <p class="sub">Search or select a movie from the list, then choose cinema, date, and showtime to unlock seat selection.</p>
+          <div class="row">
+            <div class="field">
+              <span class="label">City</span>
+              <select id="citySelect">
+                <option value="Hyderabad">Hyderabad</option>
+                <option value="Bengaluru">Bengaluru</option>
+                <option value="Mumbai">Mumbai</option>
+                <option value="Delhi NCR">Delhi NCR</option>
+                <option value="Chennai">Chennai</option>
+              </select>
+            </div>
+            <div class="field">
+              <span class="label">Language</span>
+              <select id="langSelect">
+                <option value="All">All</option>
+                <option value="Hindi">Hindi</option>
+                <option value="Telugu">Telugu</option>
+                <option value="Tamil">Tamil</option>
+                <option value="English">English</option>
+              </select>
+            </div>
+          </div>
+          <div class="row" style="align-items:end">
+            <button class="btn" id="clearFilters" type="button">Clear Filters</button>
+            <button class="btn primary" id="scrollMovies" type="button">Browse Movies</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid">
+      <div class="stack">
+        <div class="card" id="moviesCard">
+          <h3>Now Showing</h3>
+          <p class="sub">Handpicked premieres and fan‑favourites across languages and formats.</p>
+          <div class="movies" id="moviesList" role="list"></div>
+        </div>
+
+        <div class="card" id="selectionCard">
+          <h3>Selection</h3>
+          <p class="sub">Choose cinema, date and showtime, then pick seats to continue.</p>
+
+          <div class="selection">
+            <div class="row">
+              <div class="field">
+                <span class="label">Cinema</span>
+                <select id="cinemaSelect"></select>
+              </div>
+              <div class="field">
+                <span class="label">Screen / Hall</span>
+                <select id="screenSelect"></select>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="field">
+                <span class="label">Date</span>
+                <input id="dateInput" type="date" />
+              </div>
+              <div class="field">
+                <span class="label">Showtimes</span>
+                <div class="showtimes" id="showtimes"></div>
+              </div>
+            </div>
+
+            <div class="sep"></div>
+
+            <div class="field">
+              <div class="seat-legend">
+                <span class="legend"><span class="legend-dot" style="background:var(--seat-vip)"></span> VIP</span>
+                <span class="legend"><span class="legend-dot" style="background:var(--seat-prime)"></span> Prime</span>
+                <span class="legend"><span class="legend-dot" style="background:var(--seat-regular)"></span> Regular</span>
+                <span class="legend"><span class="legend-dot" style="background:var(--seat-chosen)"></span> Selected</span>
+                <span class="legend"><span class="legend-dot" style="background:var(--seat-sold)"></span> Sold</span>
+              </div>
+              <div class="screen">— SCREEN THIS SIDE —</div>
+              <div id="seatGrid" class="seat-grid" role="grid" aria-label="Seat Map"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stack">
+        <div class="card">
+          <h3>Customer & Tickets</h3>
+          <p class="sub">Enter details and ticket counts to proceed to payment.</p>
+          <div class="row">
+            <div class="field">
+              <span class="label">Full Name</span>
+              <input id="custName" type="text" placeholder="e.g., Aarav Sharma" />
+            </div>
+            <div class="field">
+              <span class="label">Email</span>
+              <input id="custEmail" type="email" placeholder="name@example.com" />
+            </div>
+          </div>
+          <div class="row">
+            <div class="field">
+              <span class="label">Phone</span>
+              <input id="custPhone" type="tel" placeholder="+91 98xxxxxx" />
+            </div>
+            <div class="field">
+              <span class="label">Language & Format</span>
+              <select id="langFormat">
+                <option value="English • 2D">English • 2D</option>
+                <option value="English • 3D">English • 3D</option>
+                <option value="Hindi • 2D">Hindi • 2D</option>
+                <option value="Hindi • IMAX">Hindi • IMAX</option>
+                <option value="Telugu • 2D">Telugu • 2D</option>
+                <option value="Tamil • 2D">Tamil • 2D</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="field">
+              <span class="label">Adult Tickets</span>
+              <input id="adultCount" type="number" min="0" value="1" />
+            </div>
+            <div class="field">
+              <span class="label">Child Tickets</span>
+              <input id="childCount" type="number" min="0" value="0" />
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="field">
+              <span class="label">Offer / Promo Code</span>
+              <div style="display:flex; gap:8px;">
+                <input id="couponInput" type="text" placeholder="WELCOME50, STUDENT10, FESTIVE20" />
+                <button id="applyCoupon" type="button" class="btn">Apply</button>
+              </div>
+            </div>
+            <div class="field">
+              <span class="label">Notes</span>
+              <input id="notes" type="text" placeholder="Accessibility / special requests" />
+            </div>
+          </div>
+        </div>
+
+        <div class="card summary" id="summaryCard">
+          <h3>Price Summary</h3>
+          <div class="row-flex"><span>Base Fare</span><span id="baseFare">₹0</span></div>
+          <div class="row-flex"><span>Convenience Fee</span><span id="convFee">₹0</span></div>
+          <div class="row-flex"><span>Discount</span><span id="discountAmt" class="ok">-₹0</span></div>
+          <div class="sep"></div>
+          <div class="row-flex"><span class="total">Grand Total</span><span class="total" id="grandTotal">₹0</span></div>
+          <p class="note">Convenience fees reflect costs for providing online booking and payment infrastructure.</p>
+          <div class="row" style="align-items:end">
+            <button class="btn" id="resetAll" type="button">Reset</button>
+            <button class="btn primary glow" id="payNow" type="button" disabled>Proceed to Payment</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="footerbar">
+    <div class="footer-inner">
+      <div style="display:flex; gap:8px; align-items:center;">
+        <span class="chip">Secure Checkout</span>
+        <span class="chip">Instant Confirmation</span>
+        <span class="chip">No External Libraries</span>
+      </div>
+      <div class="row-flex" style="gap:8px; min-width:240px;">
+        <span>Total:</span>
+        <span id="footerTotal" class="total">₹0</span>
+        <button class="btn primary" id="footerPay" type="button" disabled>Pay</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="payModal" aria-hidden="true" aria-label="Payment Modal">
+    <div class="sheet" role="dialog" aria-modal="true">
+      <div class="stack">
+        <div class="row-flex">
+          <h3 style="margin:0;">Payment</h3>
+          <button class="btn" id="closePay" type="button">Close</button>
+        </div>
+        <div>
+          <div class="pay-tabs" id="payTabs">
+            <button class="tab active" data-tab="card" type="button">Card</button>
+            <button class="tab" data-tab="upi" type="button">UPI</button>
+            <button class="tab" data-tab="wallet" type="button">Wallet</button>
+            <button class="tab" data-tab="netbank" type="button">NetBanking</button>
+          </div>
+        </div>
+        <div class="pay-form" id="payForms">
+          <div class="pay-form" data-pane="card">
+            <div class="row">
+              <div class="field">
+                <span class="label">Card Number</span>
+                <input id="cardNumber" type="text" inputmode="numeric" maxlength="19" placeholder="#### #### #### ####" />
+              </div>
+              <div class="field">
+                <span class="label">Name on Card</span>
+                <input id="cardName" type="text" placeholder="FULL NAME" />
+              </div>
+            </div>
+            <div class="row">
+              <div class="field">
+                <span class="label">Expiry (MM/YY)</span>
+                <input id="cardExp" type="text" inputmode="numeric" maxlength="5" placeholder="MM/YY" />
+              </div>
+              <div class="field">
+                <span class="label">CVV</span>
+                <input id="cardCVV" type="text" inputmode="numeric" maxlength="4" placeholder="***" />
+              </div>
+            </div>
+            <button class="btn primary glow" id="payCard" type="button">Pay Now</button>
+          </div>
+
+          <div class="pay-form hidden" data-pane="upi">
+            <div class="field">
+              <span class="label">UPI ID</span>
+              <input id="upiVpa" type="text" placeholder="name@upi" />
+            </div>
+            <button class="btn primary glow" id="payUpi" type="button">Pay via UPI</button>
+          </div>
+
+          <div class="pay-form hidden" data-pane="wallet">
+            <div class="row">
+              <button class="btn" type="button" data-wallet="Paytm">Paytm</button>
+              <button class="btn" type="button" data-wallet="PhonePe">PhonePe</button>
+              <button class="btn" type="button" data-wallet="Amazon Pay">Amazon Pay</button>
+              <button class="btn" type="button" data-wallet="Mobikwik">Mobikwik</button>
+            </div>
+            <button class="btn primary glow" id="payWallet" type="button">Pay via Wallet</button>
+          </div>
+
+          <div class="pay-form hidden" data-pane="netbank">
+            <div class="field">
+              <span class="label">Select Bank</span>
+              <select id="bankSelect">
+                <option value="">Choose Bank</option>
+                <option>HDFC Bank</option>
+                <option>ICICI Bank</option>
+                <option>State Bank of India</option>
+                <option>Axis Bank</option>
+                <option>Kotak Mahindra Bank</option>
+              </select>
+            </div>
+            <button class="btn primary glow" id="payNetbank" type="button">Pay via NetBanking</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="stack">
+        <div class="card">
+          <h3 style="margin:0;">Order Preview</h3>
+          <div class="row-flex"><span>Movie</span><span id="pvMovie">—</span></div>
+          <div class="row-flex"><span>Cinema</span><span id="pvCinema">—</span></div>
+          <div class="row-flex"><span>Date & Time</span><span id="pvDT">—</span></div>
+          <div class="row-flex"><span>Seats</span><span id="pvSeats">—</span></div>
+          <div class="row-flex"><span>Tickets</span><span id="pvTickets">—</span></div>
+          <div class="row-flex"><span>Name</span><span id="pvName">—</span></div>
+          <div class="sep"></div>
+          <div class="row-flex"><span>Total</span><span id="pvTotal" class="total">₹0</span></div>
+        </div>
+        <div class="card">
+          <h3 style="margin:0;">Status</h3>
+          <p id="payStatus" class="sub">Select a method and click Pay to simulate payment.</p>
+          <div id="spinner" class="hidden" aria-hidden="true" style="display:flex; align-items:center; gap:8px;">
+            <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#8b5cf6" d="M12,4a8,8 0 1,0 8,8h2a10,10 0 1,1 -10,-10v2Z"/></svg>
+            <span>Processing…</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section class="confirm" id="confirmView" aria-live="polite">
+    <div class="ticket">
+      <div>
+        <h2>Booking Confirmed</h2>
+        <p class="sub">Show this ticket at entry; carry valid ID matching the booking name if required by cinema policy.</p>
+        <div class="row-flex"><span>Booking ID</span><span class="mono" id="bkId">—</span></div>
+        <div class="row-flex"><span>Movie</span><span id="bkMovie">—</span></div>
+        <div class="row-flex"><span>Rating</span><span id="bkRating">—</span></div>
+        <div class="row-flex"><span>Language & Format</span><span id="bkLangFmt">—</span></div>
+        <div class="row-flex"><span>Genre • Duration</span><span id="bkMeta">—</span></div>
+        <div class="sep"></div>
+        <div class="row-flex"><span>Cinema</span><span id="bkCinema">—</span></div>
+        <div class="row-flex"><span>Screen / Hall</span><span id="bkScreen">—</span></div>
+        <div class="row-flex"><span>Address</span><span id="bkAddr">—</span></div>
+        <div class="row-flex"><span>Date</span><span id="bkDate">—</span></div>
+        <div class="row-flex"><span>Showtime</span><span id="bkTime">—</span></div>
+        <div class="sep"></div>
+        <div class="row-flex"><span>Seats</span><span id="bkSeats">—</span></div>
+        <div class="row-flex"><span>Tickets</span><span id="bkTickets">—</span></div>
+        <div class="row-flex"><span>Name</span><span id="bkName">—</span></div>
+        <div class="row-flex"><span>Email</span><span id="bkEmail">—</span></div>
+        <div class="row-flex"><span>Phone</span><span id="bkPhone">—</span></div>
+        <div class="sep"></div>
+        <div class="row-flex"><span>Payment Method</span><span id="bkPayMethod">—</span></div>
+        <div class="row-flex"><span>Ticket Price</span><span id="bkPrice">₹0</span></div>
+        <div class="row-flex"><span>Convenience Fee</span><span id="bkFee">₹0</span></div>
+        <div class="row-flex"><span>Discounts</span><span id="bkDisc">-₹0</span></div>
+        <div class="row-flex"><span>Total Paid</span><span id="bkTotal" class="total">₹0</span></div>
+      </div>
+      <div>
+        <div class="qr-wrap">
+          <div class="qr"><canvas id="qrCanvas" width="140" height="140" aria-label="QR Code"></canvas></div>
+          <div>
+            <p class="sub">The code encodes Booking ID and key details for entry validation demo; download or print your ticket.</p>
+            <button class="btn" id="downloadPng" type="button">Download Ticket (PNG)</button>
+            <button class="btn primary glow" id="printTicket" type="button">Print Ticket</button>
+          </div>
+        </div>
+        <p class="note" style="margin-top:10px;">For U/A and A certificates, local policies may require age proof; please comply with CBFC guidance.</p>
+      </div>
+    </div>
+  </section>
+
+  <script defer src="app.js"></script>
+</body>
+</html>
